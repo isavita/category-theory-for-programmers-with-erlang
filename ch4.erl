@@ -40,6 +40,12 @@ safe_reciprocal(X) ->
 
 safe_root(X) ->
   if
-    X > 0 -> #optional{is_valid=false};
-    true -> #optional{value=1/X, is_valid=true}
+    X > 0 -> #optional{value=math:sqrt(X), is_valid=true};
+    true -> #optional{is_valid=false}
+  end.
+
+safe_root_reciprocal(X) ->
+  case safe_reciprocal(X) of
+    {optional, Value, true} -> safe_root(Value);
+    _ -> #optional{is_valid=false}
   end.
