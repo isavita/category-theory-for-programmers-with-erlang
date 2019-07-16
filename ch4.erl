@@ -44,8 +44,12 @@ safe_root(X) ->
     true -> #optional{is_valid=false}
   end.
 
-safe_root_reciprocal(X) ->
-  case safe_reciprocal(X) of
-    {optional, Value, true} -> safe_root(Value);
-    _ -> #optional{is_valid=false}
+compose(F1, F2) ->
+  fun(X) ->
+    case F1(X) of
+      {optional, Value, true} -> F2(Value);
+      _ -> #optional{is_valid=false}
+    end
   end.
+
+safe_root_reciprocal(X) -> (compose(fun safe_root/1, fun safe_reciprocal/1))(X).
