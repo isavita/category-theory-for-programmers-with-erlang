@@ -1,7 +1,7 @@
 -module(ch2).
 -compile(export_all).
 
-% 2.1. Memoize function
+%% 2.1. Memoize function
 memoize(F) ->
   FunId = fun_id(F),
   case lists:member(FunId, ets:all()) of
@@ -10,30 +10,34 @@ memoize(F) ->
   end,
   memoized_fun(F).
 
-% 2.2. Random function memoized
+%% 2.2. Random function memoized
+%% No, because the memoized version returns always the same value.
 uniform_memo() -> memoize(fun random:uniform/0).
 
-% 2.3. Random function with seed memoized
+%% 2.3. Random function with seed memoized.
+%% Yes, it works due to the fact that produce the same value given the same seed.
 uniform_with_seed_memo() -> memoize(fun uniform_with_seed/1).
 uniform_with_seed(Seed) ->
   SeedValue = random:seed(Seed),
   {Value, _} = random:uniform_s(SeedValue),
   Value.
 
-% 2.4. Memoize this functions
-% a. It is pure function
+%% 2.4. Memoize this functions
+%% a. It is pure function
 fib(0) -> 0;
 fib(1) -> 1;
 fib(N) when N > 0 -> fib(N-1) + fib(N-2).
-% b. It has different output with the same input
+
+%% b. It has different output with the same input
 getchar() ->
   io:fread("Prompt> ", "~s").
-% c. It does not have same behaviour once memoized due to side thus not pure
+
+%% c. It does not have same behaviour once memoized due to side effects thus not pure
 f() ->
   io:fwrite("Hello!"),
   true.
 
-% 2.5. All boolean to boolean functions
+%% 2.5. All boolean to boolean functions
 f_bool1(false) -> true;
 f_bool1(true) -> true.
 f_bool2(false) -> false;
@@ -43,7 +47,7 @@ f_bool3(true) -> false.
 f_bool4(false) -> false;
 f_bool4(true) -> true.
 
-% 2.6. Draw a picture of a category whose only objects are the types Void , () (unit), and Bool.
+%% 2.6. Draw a picture of a category whose only objects are the types Void , () (unit), and Bool.
 unit_id() -> unit.
 void_id() -> void.
 bool_id(X) -> X.
@@ -51,9 +55,9 @@ unit_to_true() -> true.
 unit_to_false() -> false.
 bool_to_unit(false) -> unit;
 bool_to_unit(true) -> unit.
-void() -> everything.
+void() -> anything.
 
-% Helper functions
+%% Helper functions
 fun_id(F) ->
   {name, Name} = erlang:fun_info(F, name),
   {module, Module} = erlang:fun_info(F, module),

@@ -1,1 +1,6 @@
+# Ignore erlang beam files
 *.beam
+
+# Ignore elixir files
+*.ex
+*.exs
